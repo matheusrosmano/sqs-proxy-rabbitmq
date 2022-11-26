@@ -1,0 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "<BUCKET_STATE_NAME>"
+    key = "sqs-proxy-rabbitmq.tfstate"
+    region = "<BUCKET_STATE_REGION>"
+  }
+}
+
+provider "aws" {
+  region = "<BUCKET_RESOURCES_REGION>"
+}
