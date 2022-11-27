@@ -14,6 +14,7 @@ jobs:
         working-directory: "./aws-infra"
     env:
       AWS_REGION: us-east-1
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v3
 
