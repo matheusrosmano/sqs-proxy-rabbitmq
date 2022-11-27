@@ -35,3 +35,20 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "sqs_proxy_rabbitm
     aws_s3_bucket.sqs_proxy_rabbitmq_bucket
   ]
 }
+
+# s3 notification
+resource "aws_s3_bucket_notification" "sqs_proxy_rabbitmq_bucket_notification" {
+  bucket = aws_s3_bucket.sqs_proxy_rabbitmq_bucket.id
+
+  topic {
+    events    = [
+      "s3:ObjectCreated:*"
+    ]
+    topic_arn = aws_sqs_queue.sqs_proxy_rabbitmq_queue.arn
+  }
+
+  depends_on = [
+    aws_s3_bucket.sqs_proxy_rabbitmq_bucket,
+    aws_sqs_queue.sqs_proxy_rabbitmq_queue
+  ]
+}
