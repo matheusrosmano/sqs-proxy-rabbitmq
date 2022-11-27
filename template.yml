@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sqs-proxy-rabbitmq
+
+  Rabbitmq notify by aws resources
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+
+Parameters:
+  environment:
+    Type: String
+
+Resources:
+  LambdaSqsProxyRabbitmq:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub lambda-rabbitmq-notify-${environment}
+      Description: Lambda responsable get aws sqs and send to rabbitmq
+      CodeUri: src/
+      Handler: src
+      Runtime: go1.x
+      Architectures:
+        - x86_64
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: "<SQS_ARN>"
+            Enabled: true
+    DependsOn:
+      - SqsRabbitmqNotify
