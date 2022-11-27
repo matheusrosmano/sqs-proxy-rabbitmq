@@ -1,7 +1,7 @@
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "VPC principal"
+  name = "${var.preFixName}-VPC"
   cidr = "${var.preCidr}.0.0/16"
 
   azs = ["${var.awsResourceRegion}a", "${var.awsResourceRegion}b", "${var.awsResourceRegion}c"]
@@ -11,7 +11,7 @@ module "vpc" {
   enable_dns_support = true
 
   tags = {
-    Name = "VPC principal"
+    Name = "${var.preFixName}-VPC"
     Type = "VPC"
   }
 }
