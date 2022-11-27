@@ -14,3 +14,8 @@ output "vpc_id" {
   value = module.vpc.vpc_id
   sensitive = true
 }
+
+output "sqs-arn" {
+  value = aws_sqs_queue.sqs_proxy_rabbitmq_queue.arn
+  description = "SQS arn"
+}
