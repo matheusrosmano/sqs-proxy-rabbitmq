@@ -31,14 +31,12 @@ jobs:
 
       - name: Create terraform.tfvars file
         run: |
-          cat >.terraform.tfvars<<EOL
+          cat >terraform.tfvars<<EOL
           preFixName="matheusrosmano-sqs-proxy-rabbitmq"
           EOL
 
       - name: Create the file main.tf
         run: |
-          pwd
-          ls -l
           mv main.tf.modelo main.tf
           sed -i "s|<BUCKET_STATE_NAME>|${{ secrets.BUCKET_STATE_NAME }}|g" main.tf
           sed -i "s|<BUCKET_STATE_REGION>|${{ env.AWS_REGION }}|g" main.tf
