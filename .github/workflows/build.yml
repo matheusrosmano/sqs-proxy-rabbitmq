@@ -77,4 +77,6 @@ jobs:
           sam deploy --stack-name sqs-proxy-rabbitmq \
           --s3-bucket matheusrosmano-lambdas-state \
           --parameter-overrides \
-              environment=development
+              environment=development \
+          --capabilities CAPABILITY_IAM \
+          --no-confirm-changeset
