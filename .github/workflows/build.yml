@@ -5,6 +5,9 @@ on:
     branches:
       - dev
 
+env:
+  AWS_REGION: us-east-1
+
 jobs:
   infra-up:
     name: Infra up to aws
@@ -12,8 +15,6 @@ jobs:
     defaults:
       run:
         working-directory: "./aws-infra"
-    env:
-      AWS_REGION: us-east-1
     timeout-minutes: 10
     outputs:
       sqs-arn: ${{ steps.sqs-arn.outputs.SQS_ARN}}
