@@ -58,23 +58,28 @@ jobs:
         id: sqs-arn
         run: |
           SQS_ARN=$(terraform output sqs-arn)
-          echo SQS_ARN=$SQS_ARN >> $GITHUB_OUTPUT
-
-  lambda-up:
-    name: Lambda up
-    needs: [ infra-up ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Ajusta o arquivo de template
-        run: |
-          SQS_ARN=${{ needs.infra-up.outputs.sqs-arn }}
+          SQS_ARN=${SQS_ARN:1}
+          SQS_ARN=${SQS_ARN::-1}
           echo $SQS_ARN
+
+
+# echo SQS_ARN=$SQS_ARN >> $GITHUB_OUTPUT
+
+  # lambda-up:
+  #   name: Lambda up
+  #   needs: [ infra-up ]
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ env.AWS_REGION }}
+
+  #     - name: Ajusta o arquivo de template
+  #       run: |
+  #         SQS_ARN=${{ needs.infra-up.outputs.sqs-arn }}
+  #         echo $SQS_ARN
