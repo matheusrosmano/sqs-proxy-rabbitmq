@@ -29,7 +29,7 @@ Resources:
         SQSEvent:
           Type: SQS
           Properties:
-            Queue: <SQS_ARN>
+            Queue: "arn:aws:sqs:us-east-1:380305078218:matheusrosmano-sqs-proxy-rabbitmq-queue"
             Enabled: true
     DependsOn:
       - SqsRabbitmqNotify
