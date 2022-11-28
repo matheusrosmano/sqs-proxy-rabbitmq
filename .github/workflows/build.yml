@@ -73,4 +73,8 @@ jobs:
         run: sam validate
 
       - name: Sam deploy
-        run: sam deploy --stack-name sqs-proxy-rabbitmq --s3-bucket matheusrosmano-lambdas-state
+        run: |
+          sam deploy --stack-name sqs-proxy-rabbitmq \
+          --s3-bucket matheusrosmano-lambdas-state \
+          --parameter-overrides \
+              environment=development
