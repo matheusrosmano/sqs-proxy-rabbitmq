@@ -12,12 +12,7 @@ jobs:
   infra-up:
     name: Infra up to aws
     runs-on: ubuntu-22.04
-    defaults:
-      run:
-        working-directory: "./aws-infra"
     timeout-minutes: 10
-    outputs:
-      sqs-arn: ${{ steps.sqs-arn.outputs.SQS_ARN}}
     steps:
       - uses: actions/checkout@v3
 
@@ -33,12 +28,14 @@ jobs:
           terraform_version: 1.3.5
 
       - name: Create terraform.tfvars file
+        working-directory: "./aws-infra"
         run: |
           cat >terraform.tfvars<<EOL
           preFixName="matheusrosmano-sqs-proxy-rabbitmq"
           EOL
 
       - name: Create the file main.tf
+        working-directory: "./aws-infra"
         run: |
           mv main.tf.modelo main.tf
           sed -i "s|<BUCKET_STATE_NAME>|${{ secrets.BUCKET_STATE_NAME }}|g" main.tf
@@ -46,35 +43,24 @@ jobs:
           sed -i "s|<BUCKET_RESOURCES_REGION>|${{ env.AWS_REGION }}|g" main.tf
 
       - name: Terraform init
+        working-directory: "./aws-infra"
         run: terraform init
 
       - name: Terraform validate
+        working-directory: "./aws-infra"
         run: terraform validate
 
       - name: Terraform apply
+        working-directory: "./aws-infra"
         run: terraform apply -auto-approve
 
       - name: Exporta arn do sqs
         id: sqs-arn
         run: |
           SQS=$(terraform output sqs-arn)
-          echo "SQS_ARN=${SQS:1:-1}" >> $GITHUB_OUTPUT
+          sed -i "s|<SQS_ARN>|$SQS|g" template.yml
 
-  lambda-up:
-    name: Lambda up
-    needs: [ infra-up ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - uses: actions/upload-artifact@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Ajusta o arquivo de template
-        run: |
-          SQS_ARN=${{ needs.infra-up.outputs.sqs-arn }}
-          echo $SQS_ARN
+          name: my-artifact
+          path: template.yml
