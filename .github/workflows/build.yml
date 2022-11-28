@@ -57,8 +57,8 @@ jobs:
       - name: Exporta arn do sqs
         id: sqs-arn
         run: |
-          SQS_ARN=$(terraform output sqs-arn)
-          echo "SQS_ARN=${SQS_ARN:1:-1}" >> $GITHUB_OUTPUT
+          SQS=$(terraform output sqs-arn)
+          echo "SQS_ARN=${SQS:1:-1}" >> $GITHUB_OUTPUT
 
   lambda-up:
     name: Lambda up
