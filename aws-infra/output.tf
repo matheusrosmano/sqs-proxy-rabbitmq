@@ -15,8 +15,8 @@ output "vpc_id" {
   sensitive = true
 }
 
-output "sqs-arn" {
-  value = aws_sqs_queue.sqs_proxy_rabbitmq_queue.arn
+output "bucket-lambda-name" {
+  value = aws_s3_bucket.sqs_lambda_state_bucket.id
   sensitive = true
-  description = "SQS arn"
+  description = "Bucket name"
 }
