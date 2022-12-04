@@ -61,19 +61,18 @@ jobs:
         id: bucket-lambda-name
         run: |
           BUCKET_LAMBDA=$(terraform output bucket-lambda-name)
-          NOVO_NOME=${BUCKET_LAMBDA:1:-1}
-          echo $NOVO_NOME
+          echo $BUCKET_LAMBDA
       # echo "BUCKET_NAME=$NOVO_NOME" >> $GITHUB_OUTPUT
 
-  # lambda-up:
-  #   name: Lambda up to aws
-  #   runs-on: ubuntu-22.04
-  #   needs: infra-up
-  #   steps:
-  #     - uses: actions/checkout@v3
+  lambda-up:
+    name: Lambda up to aws
+    runs-on: ubuntu-22.04
+    needs: infra-up
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - name: Echo in bucket
-  #       run: echo ${{ needs.infra-up.outputs.BUCKET_LAMBDA_NAME }}
+      - name: Echo in bucket
+        run: echo ${{ needs.infra-up.outputs.BUCKET_LAMBDA_NAME }}
 
       # - name: Setup Go environment
       #   uses: actions/setup-go@v3.3.1
