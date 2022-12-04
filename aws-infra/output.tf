@@ -17,6 +17,5 @@ output "vpc_id" {
 
 output "bucket-lambda-name" {
   value = aws_s3_bucket.sqs_lambda_state_bucket.id
-  sensitive = true
   description = "Bucket name"
 }
