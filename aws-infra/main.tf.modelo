@@ -1,18 +1,22 @@
 terraform {
+  cloud {
+    organization = "<ORGANIZATION_NAME>"
+
+    workspaces {
+      name = "<WORKSPACE_NAME>"
+    }
+  }
+
   required_providers {
       aws = {
         source  = "hashicorp/aws"
         version = "~> 4.16"
       }
     }
-  required_version = ">= 0.14.9"
-  backend "s3" {
-    bucket = "<BUCKET_STATE_NAME>"
-    key = "sqs-proxy-rabbitmq.tfstate"
-    region = "<BUCKET_STATE_REGION>"
-  }
 }
 
 provider "aws" {
-  region = "<BUCKET_RESOURCES_REGION>"
+  region = "<AWS_RESOURCES_REGION>"
+  access_key = "<AWS_ACCESS_KEY_ID>"
+  secret_key = "<AWS_SECRET_ACCESS_KEY>"
 }
