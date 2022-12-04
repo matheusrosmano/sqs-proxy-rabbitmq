@@ -73,18 +73,16 @@ jobs:
         uses: aws-actions/setup-sam@v2
 
       - name: SAM BUILD
-        working-directory: ./src
         run: sam build
 
       - name: SAM validate
-        working-directory: ./src
         run: sam validate
 
       - name: Sam deploy
         working-directory: ./aws-infra
         run: |
           LAMBDA_STATE_BUCKET_NAME=$(terraform output bucket-lambda-name)
-          cd ../src
+          cd ..
           sam deploy --stack-name sqs-proxy-rabbitmq \
           --s3-bucket $LAMBDA_STATE_BUCKET_NAME \
           --parameter-overrides \
