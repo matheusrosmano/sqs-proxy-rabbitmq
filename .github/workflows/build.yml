@@ -61,7 +61,8 @@ jobs:
         id: bucket-lambda-name
         run: |
           BUCKET_LAMBDA=$(terraform output bucket-lambda-name)
-          echo "BUCKET_NAME=${BUCKET_LAMBDA:1:-1}" >> $GITHUB_OUTPUT
+          NOVO_NOME=${BUCKET_LAMBDA:1:-1}
+          echo "BUCKET_NAME=$NOVO_NOME" >> $GITHUB_OUTPUT
 
   lambda-up:
     name: Lambda up to aws
