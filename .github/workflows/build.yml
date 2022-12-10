@@ -63,10 +63,10 @@ jobs:
           SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g")
           echo "SQS_ARN=$SQS_ARN" >> $GITHUB_OUTPUT
 
-  lambda_up:
+  lambda-up:
     name: Lambda up
     runs-on: ubuntu-22.04
-    needs: infra_up
+    needs: infra-up
     steps:
       - uses: actions/checkout@v3
 
