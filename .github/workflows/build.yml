@@ -13,6 +13,9 @@ jobs:
     name: Infra up to aws
     runs-on: ubuntu-22.04
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./aws-infra
     outputs:
       BUCKET_LAMBDA_NAME: ${{ steps.bucket-lambda-name.outputs.BUCKET_NAME }}
     steps:
@@ -31,14 +34,12 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Create terraform.tfvars file
-        working-directory: ./aws-infra
         run: |
           cat >terraform.tfvars<<EOL
           preFixName="matheusrosmano-sqs-proxy-rabbitmq"
           EOL
 
       - name: Create the file main.tf
-        working-directory: ./aws-infra
         run: |
           mv main.tf.modelo main.tf
           sed -i "s|<ORGANIZATION_NAME>|${{ secrets.ORGANIZATION_NAME }}|g" main.tf
@@ -48,15 +49,12 @@ jobs:
           sed -i "s|<AWS_SECRET_ACCESS_KEY>|${{ secrets.AWS_SECRET_ACCESS_KEY }}|g" main.tf
 
       - name: Terraform init
-        working-directory: ./aws-infra
         run: terraform init
 
       - name: Terraform validate
-        working-directory: ./aws-infra
         run: terraform validate
 
       - name: Terraform apply
-        working-directory: ./aws-infra
         run: terraform apply -auto-approve
 
       - name: Get sqs arn
