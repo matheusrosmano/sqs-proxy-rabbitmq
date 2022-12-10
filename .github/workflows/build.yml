@@ -59,34 +59,39 @@ jobs:
         working-directory: ./aws-infra
         run: terraform apply -auto-approve
 
-      - name: Setup Go environment
-        uses: actions/setup-go@v3.3.1
-        with:
-          go-version: "1.19"
-          cache: true
-
-      - name: Go mod tidy
-        working-directory: ./src
-        run: go mod tidy
-
-      - name: Setup AWS SAM CLI
-        uses: aws-actions/setup-sam@v2
-
-      - name: SAM BUILD
-        run: sam build
-
-      - name: SAM validate
-        run: sam validate
-
-      - name: Sam deploy
-        working-directory: ./aws-infra
+      - name: Get sqs arn
         run: |
-          LAMBDA_STATE_BUCKET_NAME=$(terraform output bucket-lambda-name)
-          echo $LAMBDA_STATE_BUCKET_NAME
-          cd ..
-          sam deploy --stack-name sqs-proxy-rabbitmq \
-          --s3-bucket $LAMBDA_STATE_BUCKET_NAME \
-          --parameter-overrides \
-              environment=development \
-          --capabilities CAPABILITY_IAM \
-          --no-confirm-changeset
+          SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g")
+          echo $SQS_ARN
+
+      # - name: Setup Go environment
+      #   uses: actions/setup-go@v3.3.1
+      #   with:
+      #     go-version: "1.19"
+      #     cache: true
+
+      # - name: Go mod tidy
+      #   working-directory: ./src
+      #   run: go mod tidy
+
+      # - name: Setup AWS SAM CLI
+      #   uses: aws-actions/setup-sam@v2
+
+      # - name: SAM BUILD
+      #   run: sam build
+
+      # - name: SAM validate
+      #   run: sam validate
+
+      # - name: Sam deploy
+      #   working-directory: ./aws-infra
+      #   run: |
+      #     LAMBDA_STATE_BUCKET_NAME=$(terraform output bucket-lambda-name)
+      #     echo $LAMBDA_STATE_BUCKET_NAME
+      #     cd ..
+      #     sam deploy --stack-name sqs-proxy-rabbitmq \
+      #     --s3-bucket $LAMBDA_STATE_BUCKET_NAME \
+      #     --parameter-overrides \
+      #         environment=development \
+      #     --capabilities CAPABILITY_IAM \
+      #     --no-confirm-changeset
