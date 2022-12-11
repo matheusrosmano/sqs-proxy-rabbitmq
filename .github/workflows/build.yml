@@ -66,7 +66,7 @@ jobs:
         id: sqs-arn
         run: |
           SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g" | sed "s|%0A||g" | sed "s|-||g")
-          echo "SQS_ARN=$SQS_ARN" >> $GITHUB_OUTPUT
+          echo "SQS_ARN=matheusrosmanosqsproxyrabbitmqqueue" >> $GITHUB_OUTPUT
         # echo "SQS_ARN<<EOF" >> $GITHUB_ENV
         # echo $SQS_ARN >> $GITHUB_ENV
 
