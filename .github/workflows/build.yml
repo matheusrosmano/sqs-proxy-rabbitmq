@@ -59,6 +59,7 @@ jobs:
 
       - name: Get sqs arn
         id: sqs-arn
+        shell: bash
         run: |
           SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g")
           SQS_ARN_STRING="$SQS_ARN"
