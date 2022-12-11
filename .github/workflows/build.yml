@@ -59,9 +59,8 @@ jobs:
 
       - name: Get sqs arn
         id: sqs-arn
-        shell: bash
         run: |
-          SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g")
+          SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g" | sed "s|\n||g" | sed "s| ||g")
           SQS_ARN_STRING="$SQS_ARN"
           echo "SQS_ARN=$SQS_ARN_STRING" >> $GITHUB_ENV
 
