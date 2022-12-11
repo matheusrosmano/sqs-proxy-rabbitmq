@@ -63,7 +63,7 @@ jobs:
         run: |
           SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g")
           SQS_ARN_STRING="$SQS_ARN"
-          echo "SQS_ARN=$SQS_ARN_STRING" >> $GITHUB_OUTPUT
+          echo "SQS_ARN=$SQS_ARN_STRING" >> $GITHUB_ENV
 
   lambda-up:
     name: Lambda up
