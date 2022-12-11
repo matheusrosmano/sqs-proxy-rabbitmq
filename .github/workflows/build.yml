@@ -11,7 +11,7 @@ env:
 jobs:
   infra-up:
     name: Infra up to aws
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
       run:
@@ -61,15 +61,13 @@ jobs:
         id: sqs-arn
         run: |
           SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g" | sed "s|\n||g")
-          echo "SQS_ARN<<EOF" >> $GITHUB_OUTPUT
-          echo "$SQS_ARN" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "SQS_ARN=$SQS_ARN" >> $GITHUB_OUTPUT
         # echo "SQS_ARN<<EOF" >> $GITHUB_ENV
         # echo $SQS_ARN >> $GITHUB_ENV
 
   lambda-up:
     name: Lambda up
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs: infra-up
     steps:
       - uses: actions/checkout@v3
