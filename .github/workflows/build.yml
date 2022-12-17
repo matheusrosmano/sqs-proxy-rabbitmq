@@ -60,13 +60,13 @@ jobs:
 
       - name: Debug sqs
         run: |
-          TESTE=$(terraform output sqs-arn | sed "s|\"||g")
+          TESTE=$(terraform output sqs-arn | sed "s|\"||g" | sed "s|-||g")
           echo $TESTE
 
       - name: Get sqs arn
         id: sqs-arn
         run: |
-          TESTE=$(terraform output sqs-arn | sed "s|\"||g")
+          TESTE=$(terraform output sqs-arn | sed "s|\"||g" | sed "s|-||g")
           echo "SQS_ARN=$TESTE" >> $GITHUB_OUTPUT
 
   lambda-up:
