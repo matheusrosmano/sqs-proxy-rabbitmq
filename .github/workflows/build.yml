@@ -32,6 +32,7 @@ jobs:
         with:
           terraform_version: "v1.3.5"
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
 
       - name: Create terraform.tfvars file
         run: |
@@ -57,15 +58,10 @@ jobs:
       - name: Terraform apply
         run: terraform apply -auto-approve
 
-      - name: Get sqs arn in shell
-        run: |
-          SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g" | sed "s|-||g" | sed "s|%0A||g" | sed "s| ||g")
-          echo $SQS_ARN
-
       - name: Get sqs arn
         id: sqs-arn
         run: |
-          SQS_ARN=$(terraform output sqs-arn | sed "s|%0A||g" | sed "s| ||g")
+          SQS_ARN=$(terraform output sqs-arn | sed "s|\"||g" | sed "s| ||g")
           echo "SQS_ARN=$SQS_ARN" >> $GITHUB_OUTPUT
         # echo "SQS_ARN<<EOF" >> $GITHUB_ENV
         # echo $SQS_ARN >> $GITHUB_ENV
