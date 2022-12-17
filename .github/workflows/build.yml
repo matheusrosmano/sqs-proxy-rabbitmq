@@ -58,11 +58,14 @@ jobs:
       - name: Terraform apply
         run: terraform apply -auto-approve
 
+      - name: Debug sqs
+        run: |
+          TESTE=$(terraform output sqs-arn)
+          echo $TESTE
+
       - name: Get sqs arn
         id: sqs-arn
         run: echo "SQS_ARN=$(terraform output sqs-arn)" >> $GITHUB_OUTPUT
-        # echo "SQS_ARN<<EOF" >> $GITHUB_ENV
-        # echo $SQS_ARN >> $GITHUB_ENV
 
   lambda-up:
     name: Lambda up
