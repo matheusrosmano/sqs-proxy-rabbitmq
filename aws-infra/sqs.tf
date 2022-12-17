@@ -1,5 +1,5 @@
 resource "aws_sqs_queue" "sqs_proxy_rabbitmq_queue" {
-  name = "${var.preFixName}-queue"
+  name = "${var.preFixName}queue"
   sqs_managed_sse_enabled = true
   visibility_timeout_seconds = 60
 
@@ -11,7 +11,7 @@ resource "aws_sqs_queue" "sqs_proxy_rabbitmq_queue" {
         "Effect": "Allow",
         "Principal": "*",
         "Action": "sqs:SendMessage",
-        "Resource": "arn:aws:sqs:*:*:${var.preFixName}-queue",
+        "Resource": "arn:aws:sqs:*:*:${var.preFixName}queue",
         "Condition": {
           "ArnEquals": { "aws:SourceArn": "${aws_s3_bucket.sqs_proxy_rabbitmq_bucket.arn}" }
         }

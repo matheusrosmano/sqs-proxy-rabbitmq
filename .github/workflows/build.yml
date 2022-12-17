@@ -37,7 +37,7 @@ jobs:
       - name: Create terraform.tfvars file
         run: |
           cat >terraform.tfvars<<EOL
-          preFixName="matheusrosmano-sqs-proxy-rabbitmq"
+          preFixName="matheusrosmanosqsproxyrabbitmq"
           EOL
 
       - name: Create the file main.tf
