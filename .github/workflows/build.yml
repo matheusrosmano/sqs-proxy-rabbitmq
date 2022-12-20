@@ -65,6 +65,7 @@ jobs:
 
       - name: Get sqs arn
         id: sqs-arn
+        shell: bash
         run: |
           TESTE="$(terraform output sqs-arn | sed "s|\"||g")"
           echo "SQS_ARN=$TESTE" >> $GITHUB_OUTPUT
