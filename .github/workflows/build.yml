@@ -18,7 +18,7 @@ jobs:
         working-directory: ./aws-infra
     outputs:
       SQS_ARN: ${{ steps.sqs-arn.outputs.SQS_ARN }}
-      BUCKET_STATE_LAMBDA_NAME: ${{ steps.sqs-arn.outputs.BUCKET_STATE_LAMBDA_NAME }}
+      BUCKET_STATE_LAMBDA_NAME: ${{ steps.bucket-lambda-state.outputs.BUCKET_STATE_LAMBDA_NAME }}
     steps:
       - uses: actions/checkout@v3
 
