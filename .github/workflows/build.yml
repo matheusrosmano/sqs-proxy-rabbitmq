@@ -59,14 +59,18 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Debug sqs
+        shell: bash
         run: |
-          TESTE="$(terraform output sqs-arn | sed 's|"||g' | sed "s|-||g")"
+          set -x
+          TESTE=$(terraform output sqs-arn)
           echo $TESTE
 
       - name: Get sqs arn
+        shell: bash
         id: sqs-arn
         run: |
-          TESTE="$(terraform output sqs-arn | sed 's|"||g' | sed "s|-||g")"
+          set -x
+          TESTE=$(terraform output sqs-arn)
           echo "SQS_ARN='$TESTE'" >> $GITHUB_OUTPUT
 
   lambda-up:
