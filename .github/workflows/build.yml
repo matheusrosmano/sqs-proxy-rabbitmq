@@ -80,9 +80,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get sqs arn
-        run: echo ${{ needs.infra-up.outputs.SQS_ARN }}
-
       # - name: Setup Go environment
       #   uses: actions/setup-go@v3.3.1
       #   with:
@@ -92,6 +89,15 @@ jobs:
       # - name: Go mod tidy
       #   working-directory: ./src
       #   run: go mod tidy
+
+      - name: Replace sqs into template
+        run: |
+          sed -i "s|<SQS_ARN>|${{ needs.infra-up.outputs.SQS_ARN }}|g" template.yml
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: template.yml
 
       # - name: Setup AWS SAM CLI
       #   uses: aws-actions/setup-sam@v2

@@ -29,5 +29,5 @@ Resources:
         SQSEvent:
           Type: SQS
           Properties:
-            Queue: "arn:aws:sqs:us-east-1:380305078218:matheusrosmano-sqs-proxy-rabbitmq-queue"
+            Queue: "<SQS_ARN>"
             Enabled: true
