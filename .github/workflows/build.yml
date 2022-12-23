@@ -62,7 +62,7 @@ jobs:
         shell: bash
         run: |
           set -x
-          TESTE=$(terraform output sqs-arn)
+          TESTE=$(terraform output -raw sqs-arn)
           echo $TESTE
 
       - name: Get sqs arn
@@ -70,7 +70,7 @@ jobs:
         id: sqs-arn
         run: |
           set -x
-          TESTE=$(terraform output sqs-arn)
+          TESTE=$(terraform output -raw sqs-arn)
           echo "SQS_ARN=$TESTE" >> $GITHUB_OUTPUT
 
   lambda-up:
