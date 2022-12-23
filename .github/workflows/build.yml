@@ -59,18 +59,9 @@ jobs:
       - name: Terraform apply
         run: terraform apply -auto-approve
 
-      - name: Debug sqs
-        shell: bash
-        run: |
-          set -x
-          TESTE=$(terraform output -raw sqs-arn)
-          echo $TESTE
-
       - name: Get sqs arn
-        shell: bash
         id: sqs-arn
         run: |
-          set -x
           TESTE=$(terraform output -raw sqs-arn)
           echo "SQS_ARN=$TESTE" >> $GITHUB_OUTPUT
 
@@ -81,43 +72,38 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Setup Go environment
-      #   uses: actions/setup-go@v3.3.1
-      #   with:
-      #     go-version: "1.19"
-      #     cache: true
+      - name: Setup Go environment
+        uses: actions/setup-go@v3.3.1
+        with:
+          go-version: "1.19"
+          cache: true
 
-      # - name: Go mod tidy
-      #   working-directory: ./src
-      #   run: go mod tidy
+      - name: Go mod tidy
+        working-directory: ./src
+        run: go mod tidy
 
       - name: Replace sqs into template
         run: |
           sed -i "s|<SQS_ARN>|${{ needs.infra-up.outputs.SQS_ARN }}|g" template.yml
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact
-          path: template.yml
+      - name: Setup AWS SAM CLI
+        uses: aws-actions/setup-sam@v2
 
-      # - name: Setup AWS SAM CLI
-      #   uses: aws-actions/setup-sam@v2
+      - name: SAM BUILD
+        run: sam build
 
-      # - name: SAM BUILD
-      #   run: sam build
+      - name: SAM validate
+        run: sam validate
 
-      # - name: SAM validate
-      #   run: sam validate
-
-      # - name: Sam deploy
-      #   working-directory: ./aws-infra
-      #   run: |
-      #     LAMBDA_STATE_BUCKET_NAME=$(terraform output bucket-lambda-name)
-      #     echo $LAMBDA_STATE_BUCKET_NAME
-      #     cd ..
-      #     sam deploy --stack-name sqs-proxy-rabbitmq \
-      #     --s3-bucket $LAMBDA_STATE_BUCKET_NAME \
-      #     --parameter-overrides \
-      #         environment=development \
-      #     --capabilities CAPABILITY_IAM \
-      #     --no-confirm-changeset
+      - name: Sam deploy
+        working-directory: ./aws-infra
+        run: |
+          LAMBDA_STATE_BUCKET_NAME=$(terraform output bucket-lambda-name)
+          echo $LAMBDA_STATE_BUCKET_NAME
+          cd ..
+          sam deploy --stack-name sqs-proxy-rabbitmq \
+          --s3-bucket $LAMBDA_STATE_BUCKET_NAME \
+          --parameter-overrides \
+              environment=development \
+          --capabilities CAPABILITY_IAM \
+          --no-confirm-changeset
