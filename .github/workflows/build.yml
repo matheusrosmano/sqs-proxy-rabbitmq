@@ -43,8 +43,8 @@ jobs:
       - name: Create the file main.tf
         run: |
           mv main.tf.modelo main.tf
-          sed -i "s|<ORGANIZATION_NAME>|${{ secrets.ORGANIZATION_NAME }}|g" main.tf
-          sed -i "s|<WORKSPACE_NAME>|${{ secrets.WORKSPACE_NAME }}|g" main.tf
+          sed -i "s|<ORGANIZATION_NAME>|rosmano-tech|g" main.tf
+          sed -i "s|<WORKSPACE_NAME>|sqs-proxy-rabbitmq|g" main.tf
           sed -i "s|<AWS_RESOURCES_REGION>|${{ env.AWS_REGION }}|g" main.tf
           sed -i "s|<AWS_ACCESS_KEY_ID>|${{ secrets.AWS_ACCESS_KEY_ID }}|g" main.tf
           sed -i "s|<AWS_SECRET_ACCESS_KEY>|${{ secrets.AWS_SECRET_ACCESS_KEY }}|g" main.tf
