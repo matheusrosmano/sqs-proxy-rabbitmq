@@ -71,7 +71,7 @@ jobs:
         run: |
           set -x
           TESTE=$(terraform output sqs-arn)
-          echo "SQS_ARN='$TESTE'" >> $GITHUB_OUTPUT
+          echo "SQS_ARN=$TESTE" >> $GITHUB_OUTPUT
 
   lambda-up:
     name: Lambda up
