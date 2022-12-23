@@ -18,6 +18,7 @@ jobs:
         working-directory: ./aws-infra
     outputs:
       SQS_ARN: ${{ steps.sqs-arn.outputs.SQS_ARN }}
+      BUCKET_STATE_LAMBDA_NAME: ${{ steps.sqs-arn.outputs.BUCKET_STATE_LAMBDA_NAME }}
     steps:
       - uses: actions/checkout@v3
 
@@ -62,8 +63,14 @@ jobs:
       - name: Get sqs arn
         id: sqs-arn
         run: |
-          TESTE=$(terraform output -raw sqs-arn)
-          echo "SQS_ARN=$TESTE" >> $GITHUB_OUTPUT
+          ARN_SQS=$(terraform output -raw sqs-arn)
+          echo "SQS_ARN=$ARN_SQS" >> $GITHUB_OUTPUT
+
+      - name: Get bucket name of lambdas states
+        id: bucket-lambda-state
+        run: |
+          BUCKET_STATE_LAMBDA_NAME=$(terraform output -raw bucket-lambda-name)
+          echo "BUCKET_STATE_LAMBDA_NAME=$BUCKET_STATE_LAMBDA_NAME" >> $GITHUB_OUTPUT
 
   lambda-up:
     name: Lambda up
@@ -96,13 +103,9 @@ jobs:
         run: sam validate
 
       - name: Sam deploy
-        working-directory: ./aws-infra
         run: |
-          LAMBDA_STATE_BUCKET_NAME=$(terraform output bucket-lambda-name)
-          echo $LAMBDA_STATE_BUCKET_NAME
-          cd ..
           sam deploy --stack-name sqs-proxy-rabbitmq \
-          --s3-bucket $LAMBDA_STATE_BUCKET_NAME \
+          --s3-bucket ${{ needs.infra-up.outputs.BUCKET_STATE_LAMBDA_NAME }} \
           --parameter-overrides \
               environment=development \
           --capabilities CAPABILITY_IAM \
