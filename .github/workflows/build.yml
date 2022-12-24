@@ -93,6 +93,14 @@ jobs:
         run: |
           sed -i "s|<SQS_ARN>|${{ needs.infra-up.outputs.SQS_ARN }}|g" template.yml
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          mask-aws-account-id: "no"
+
       - name: Setup AWS SAM CLI
         uses: aws-actions/setup-sam@v2
 
